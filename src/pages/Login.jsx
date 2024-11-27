@@ -20,8 +20,8 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+    <div className="flex items-center justify-center bg-gray-100 py-8 px-4">
+      <div className="max-w-md w-full space-y-6 bg-white p-6 rounded-xl shadow-lg border border-gray-200">
         <h2 className="text-center text-3xl font-extrabold text-gray-900">
           Đăng nhập
         </h2>

@@ -152,12 +152,19 @@ const ForgotPassword = () => {
             </form>
           </>
         );
+        
+      default:
+        return (
+          <div className="text-center">
+            <p className="text-red-500">Đã xảy ra lỗi không mong muốn</p>
+          </div>
+        );
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+    <div className="flex items-center justify-center bg-gray-100 py-8 px-4">
+      <div className="max-w-md w-full space-y-6 bg-white p-6 rounded-xl shadow-lg border border-gray-200">
         {renderStep()}
         
         <div className="mt-4 text-center">

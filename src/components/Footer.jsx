@@ -13,16 +13,16 @@ const Footer = () => {
               Chuyên cung cấp các linh kiện máy tính, laptop chính hãng với giá tốt nhất thị trường
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-[#0276ED]">
+              <a href="https://www.facebook.com" className="text-gray-400 hover:text-[#0276ED]">
                 <FaFacebook size={24} />
               </a>
-              <a href="#" className="text-gray-400 hover:text-[#0276ED]">
+              <a href="https://x.com" className="text-gray-400 hover:text-[#0276ED]">
                 <FaTwitter size={24} />
               </a>
-              <a href="#" className="text-gray-400 hover:text-[#0276ED]">
+              <a href="https://www.instagram.com" className="text-gray-400 hover:text-[#0276ED]">
                 <FaInstagram size={24} />
               </a>
-              <a href="#" className="text-gray-400 hover:text-[#0276ED]">
+              <a href="https://www.youtube.com" className="text-gray-400 hover:text-[#0276ED]">
                 <FaYoutube size={24} />
               </a>
             </div>
