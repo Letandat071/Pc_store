@@ -16,7 +16,11 @@ const Breadcrumb = () => {
     'cpu': 'CPU',
     'mainboard': 'Mainboard',
     'ram': 'RAM',
-    'gpu': 'Card đồ họa'
+    'gpu': 'Card đồ họa',
+    'login': 'Đăng nhập',
+    'register': 'Đăng ký',
+    'build-pc': 'Xây cấu hình',
+    'promotion': 'Khuyến mãi'
   };
 
   return (

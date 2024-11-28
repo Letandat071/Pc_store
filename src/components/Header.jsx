@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaShoppingCart, FaUser, FaSearch, FaBars, FaTimes } from 'react-icons/fa';
 
@@ -45,8 +45,23 @@ const Header = () => {
     navigate('/login');
   };
 
+  const categoryRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (categoryRef.current && !categoryRef.current.contains(event.target)) {
+        setIsCategoryOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
-    <header className="bg-white shadow-lg fixed w-full top-0 left-0 z-50">
+    <header className="fixed w-full top-0 left-0 z-40">
       {/* Top bar */}
       <div className="bg-[#E30019] text-white py-1 text-sm">
         <div className="container mx-auto px-4">
@@ -61,66 +76,68 @@ const Header = () => {
       </div>
 
       {/* Main header */}
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          {/* Mobile menu button */}
-          <button 
-            className="md:hidden text-gray-700"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
-          </button>
+      <div className="bg-white shadow-md">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-14">
+            {/* Mobile menu button */}
+            <button 
+              className="md:hidden text-gray-700"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+            </button>
 
-          {/* Logo */}
-          <Link to="/" className="flex items-center">
-            <img src="https://imgur.com/kZ2OXuM.png" alt="Logo" className="h-8 w-auto" />
-            <span className="ml-2 text-2xl font-bold text-[#E30019]">PC STORE</span>
-          </Link>
-
-          {/* Search Bar */}
-          <div className="hidden md:flex flex-1 max-w-xl mx-6">
-            <div className="relative w-full">
-              <input
-                type="text"
-                placeholder="Tìm kiếm sản phẩm..."
-                className="w-full px-4 py-2 rounded-lg bg-gray-100 border border-gray-200 focus:outline-none focus:border-[#E30019]"
-              />
-              <button className="absolute right-2 top-1/2 -translate-y-1/2">
-                <FaSearch className="text-gray-400 hover:text-[#E30019]" />
-              </button>
-            </div>
-          </div>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-6">
-            <Link to="/cart" className="text-gray-700 hover:text-[#E30019] relative">
-              <FaShoppingCart className="h-6 w-6" />
-              <span className="absolute -top-2 -right-2 bg-[#E30019] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                0
-              </span>
+            {/* Logo */}
+            <Link to="/" className="flex items-center">
+              <img src="https://imgur.com/kZ2OXuM.png" alt="Logo" className="h-8 w-auto" />
+              <span className="ml-2 text-2xl font-bold text-[#E30019]">PC STORE</span>
             </Link>
-            
-            {isLoggedIn ? (
-              <Link to="/profile" className="text-gray-700 hover:text-[#E30019]">
-                <FaUser className="h-6 w-6" />
+
+            {/* Search Bar */}
+            <div className="hidden md:flex flex-1 max-w-xl mx-6">
+              <div className="relative w-full">
+                <input
+                  type="text"
+                  placeholder="Tìm kiếm sản phẩm..."
+                  className="w-full px-4 py-2 rounded-lg bg-gray-100 border border-gray-200 focus:outline-none focus:border-[#E30019]"
+                />
+                <button className="absolute right-2 top-1/2 -translate-y-1/2">
+                  <FaSearch className="text-gray-400 hover:text-[#E30019]" />
+                </button>
+              </div>
+            </div>
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-6">
+              <Link to="/cart" className="text-gray-700 hover:text-[#E30019] relative">
+                <FaShoppingCart className="h-6 w-6" />
+                <span className="absolute -top-2 -right-2 bg-[#E30019] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                  0
+                </span>
               </Link>
-            ) : (
-              <button 
-                onClick={handleAuthClick}
-                className="bg-[#E30019] text-white px-4 py-2 rounded-lg hover:bg-[#E30019]/90"
-              >
-                Đăng nhập
-              </button>
-            )}
+              
+              {isLoggedIn ? (
+                <Link to="/profile" className="text-gray-700 hover:text-[#E30019]">
+                  <FaUser className="h-6 w-6" />
+                </Link>
+              ) : (
+                <button 
+                  onClick={handleAuthClick}
+                  className="bg-[#E30019] text-white px-4 py-2 rounded-lg hover:bg-[#E30019]/90"
+                >
+                  Đăng nhập
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
       {/* Category menu */}
-      <div className="border-t border-gray-200">
+      <div className="border-t border-gray-200 bg-white border-b border-[#E30019]/30">
         <div className="container mx-auto px-4">
           <div className="hidden md:flex items-center space-x-8 py-2">
-            <div className="relative">
+            <div className="relative" ref={categoryRef}>
               <button
                 className="flex items-center space-x-2 text-gray-700 hover:text-[#E30019]"
                 onClick={() => setIsCategoryOpen(!isCategoryOpen)}
@@ -139,7 +156,7 @@ const Header = () => {
                         {items.map((item) => (
                           <li key={item}>
                             <Link 
-                              to={`/category/${item.toLowerCase()}`}
+                              to={`/products/category/${item.toLowerCase().replace(/ /g, '-')}`}
                               className="text-gray-600 hover:text-[#E30019] text-sm"
                             >
                               {item}
@@ -161,7 +178,7 @@ const Header = () => {
 
       {/* Mobile menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-200">
+        <div className="md:hidden bg-white border-b border-[#E30019]/30 overflow-y-auto max-h-[calc(100vh-4rem)]">
           <div className="container mx-auto px-4 py-4">
             {/* Mobile search */}
             <div className="relative mb-4">
@@ -183,7 +200,7 @@ const Header = () => {
                   {items.map((item) => (
                     <li key={item}>
                       <Link 
-                        to={`/category/${item.toLowerCase()}`}
+                        to={`/products/category/${item.toLowerCase().replace(/ /g, '-')}`}
                         className="text-gray-600 hover:text-[#E30019] text-sm"
                       >
                         {item}
