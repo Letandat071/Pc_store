@@ -10,6 +10,7 @@ const News = () => {
   const [loading, setLoading] = useState(true);
   const [currentCategory, setCurrentCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [filteredNews, setFilteredNews] = useState([]);
 
   const categories = [
     { id: 'all', name: 'Tất cả', icon: '🌟' },
@@ -25,6 +26,7 @@ const News = () => {
       try {
         const data = await fetchNews(currentCategory);
         setNews(data);
+        setFilteredNews(data.items || []);
       } catch (error) {
         console.error('Error fetching news:', error);
       }
@@ -34,10 +36,15 @@ const News = () => {
     loadNews();
   }, [currentCategory]);
 
-  const filteredNews = news.items?.filter(item =>
-    item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.excerpt.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  useEffect(() => {
+    if (!news.items) return;
+    
+    const filtered = news.items.filter(item =>
+      item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.excerpt.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredNews(filtered);
+  }, [searchTerm, news.items]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -122,8 +129,12 @@ const News = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {loading ? (
             Array(6).fill().map((_, i) => <NewsSkeleton key={i} />)
+          ) : filteredNews.length > 0 ? (
+            filteredNews.map(item => <NewsCard key={item.id} news={item} />)
           ) : (
-            filteredNews?.map(item => <NewsCard key={item.id} news={item} />)
+            <div className="col-span-3 text-center py-8 text-gray-500">
+              Không tìm thấy tin tức phù hợp
+            </div>
           )}
         </div>
       </div>

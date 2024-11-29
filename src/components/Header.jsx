@@ -63,10 +63,10 @@ const Header = () => {
   return (
     <header className="fixed w-full top-0 left-0 z-40">
       {/* Top bar */}
-      <div className="bg-[#E30019] text-white py-1 text-sm">
+      <div className="bg-[#E30019] text-white text-sm">
         <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center">
-            <p>Hotline: 1900 1234 | Email: support@pcstore.com</p>
+          <div className="flex justify-between items-center h-6">
+            <p className="truncate">Hotline: 1900 1234 | Email: support@pcstore.com</p>
             <div className="hidden md:flex space-x-4">
               <Link to="/tracking">Tra cứu đơn hàng</Link>
               <Link to="/support">Hỗ trợ kỹ thuật</Link>
@@ -78,7 +78,7 @@ const Header = () => {
       {/* Main header */}
       <div className="bg-white shadow-md">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-14">
+          <div className="flex items-center justify-between h-12">
             {/* Mobile menu button */}
             <button 
               className="md:hidden text-gray-700"

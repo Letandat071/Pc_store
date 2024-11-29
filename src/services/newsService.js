@@ -45,7 +45,7 @@ const RSS_FEEDS = [
     decoder: decodeThanhnien // Sử dụng decoder riêng cho Thanh Niên
   },
   {
-    url: encodeURIComponent('https://genk.vn/rss/home.rss'),
+    url: encodeURIComponent('https://genk.vn/rss/do-choi-so.rss'),
     source: 'GenK',
     imageExtractor: (description) => {
       const regex = /<img[^>]+src="([^">]+)"[^>]*>/;
@@ -65,22 +65,18 @@ export const fetchNews = async (category = 'all') => {
     
     for (const feed of RSS_FEEDS) {
       const response = await axios.get(`${RSS2JSON_API}${feed.url}`);
-      const items = response.data.items.map(item => {
-        const imageUrl = feed.imageExtractor(item.description);
-        
-        return {
-          id: item.guid,
-          // Sử dụng decoder tương ứng với nguồn
-          title: feed.decoder(item.title),
-          excerpt: feed.decoder(
-            item.description.replace(/<[^>]*>/g, '').slice(0, 150) + '...'
-          ),
-          link: item.link,
-          image: imageUrl || item.thumbnail || 'https://i1-sohoa.vnecdn.net/2023/12/05/avatar-1701757095-1701757103-4367-1701757255.png',
-          publishDate: new Date(item.pubDate).toLocaleDateString('vi-VN'),
-          source: feed.source
-        };
-      });
+      const items = response.data.items.map(item => ({
+        id: item.guid,
+        title: feed.decoder(item.title),
+        excerpt: feed.decoder(
+          item.description.replace(/<[^>]*>/g, '').slice(0, 150) + '...'
+        ),
+        link: item.link,
+        image: feed.imageExtractor(item.description) || item.thumbnail || 'https://i1-sohoa.vnecdn.net/2023/12/05/avatar-1701757095-1701757103-4367-1701757255.png',
+        publishDate: new Date(item.pubDate).toLocaleDateString('vi-VN'),
+        source: feed.source,
+        category: getCategoryFromContent(item.title + ' ' + item.description)
+      }));
       
       newsItems.push(...items);
     }
@@ -90,7 +86,10 @@ export const fetchNews = async (category = 'all') => {
         !item.image.includes('blank.png') && 
         !item.image.includes('placeholder') &&
         item.image.startsWith('http');
-      return hasValidImage;
+      
+      const matchesCategory = category === 'all' || item.category === category;
+      
+      return hasValidImage && matchesCategory;
     });
 
     validItems.sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate));
@@ -120,4 +119,15 @@ export const fetchNews = async (category = 'all') => {
       }))
     };
   }
-}; 
+};
+
+function getCategoryFromContent(content) {
+  content = content.toLowerCase();
+  
+  if (content.includes('gaming') || content.includes('game')) return 'gaming';
+  if (content.includes('review') || content.includes('đánh giá')) return 'review';
+  if (content.includes('hardware') || content.includes('phần cứng')) return 'hardware';
+  if (content.includes('tech') || content.includes('công nghệ')) return 'tech';
+  
+  return 'tech'; // category mặc định
+} 

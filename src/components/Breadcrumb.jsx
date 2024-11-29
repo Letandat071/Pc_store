@@ -20,12 +20,13 @@ const Breadcrumb = () => {
     'login': 'Đăng nhập',
     'register': 'Đăng ký',
     'build-pc': 'Xây cấu hình',
-    'promotion': 'Khuyến mãi'
+    'promotion': 'Khuyến mãi',
+    'news': 'Tin tức'
   };
 
   return (
-    <nav className="bg-white py-3 px-4 border-b border-[#E30019]/30">
-      <ol className="flex items-center space-x-2 text-sm">
+    <nav className="bg-white border-b border-[#E30019]/30">
+      <ol className="flex items-center space-x-2 text-sm h-10 md:h-12 px-4">
         <li>
           <Link to="/" className="text-gray-600 hover:text-[#E30019] flex items-center">
             <FaHome className="w-4 h-4" />
